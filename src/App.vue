@@ -1,7 +1,16 @@
 <script>
+    import Header from './components/HeaderComponent.vue'
+    export default {
+        name: 'MyApp',
+        components: {
+            Header,
+        }
+    }
 </script>
 
 <template>
+
+    <Header />
    
 </template>
 
