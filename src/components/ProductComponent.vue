@@ -51,7 +51,7 @@
 
     .on-image {
         position: absolute;
-        top: 550px;
+        bottom: 100px;
 
         span {
             font-size: 0.7rem;

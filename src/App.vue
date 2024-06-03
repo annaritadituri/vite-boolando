@@ -1,11 +1,13 @@
 <script>
     import Header from './components/HeaderComponent.vue'
     import ProductsList from './components/ProductsList.vue'
+    import Footer from './components/FooterComponent.vue'
     export default {
         name: 'MyApp',
         components: {
             Header,
             ProductsList,
+            Footer,
         },
     }
 </script>
@@ -14,6 +16,7 @@
 
     <Header />
     <ProductsList />
+    <Footer />
         
    
 </template>
