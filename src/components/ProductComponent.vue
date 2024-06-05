@@ -17,13 +17,13 @@
                 class="discount-percent p-1 px-2 me-1"
                 v-show="discount !== 0"
             >
-                -{{ discount }}&percnt;
+                {{ discount }}
             </span>
             <span
                 class="label p-1 px-2"
-                v-show="isGreen === true"
+                v-show="isGreen !== ''"
             >
-                Sostenibilità
+                {{ isGreen }}
             </span>
 
         </div>

@@ -1,4 +1,5 @@
 <script>
+    import products from '../data/db.json'
     import Product from './ProductComponent.vue'
     export default {
         name: 'Products List',
@@ -9,13 +10,10 @@
 
             return {
 
-                image: this.fillArrayImg(),
-                discount: [50, 30, 30, 50, 0, 0],
-                isGreen: [true, false, false, true, false, true],
-                brandName: ["Levi's", "Guess", "Come Zucchero Filato", "Levi's", "Maya Deluxe", "Esprit"],
-                productName: ["Relaxed fit tee unisex", "Roses tee", "Voglia di colori pastello", "Tee unisex", "Stripe bodice", "Maglione - Black"],
-                price: [29.99, 29.99, 184.99, 29.99, 99.99, 29.99],
+                products: products.products,
                 priceOnSale: [],
+                discountArray: [],
+                count: 0,
 
             };
 
@@ -23,53 +21,84 @@
 
         methods: {
 
-            fillArrayImg() {
+            displayProducts() {
 
-                let img = []
-
-                for(let i = 0; i < 6; i++) {
-                    img[i] = `/img/${i + 1}.webp`;
+                console.log(this.products);
+                for(let i = 0; i < this.products.length; i++) {
+                    console.log(Object.values(this.products));
                 }
-                return img;
+                return this.products;
 
             },
 
-            groupCard() {
+            calculateDiscount(index) {
 
-                let cardsList = [];
+                let i = 0;
+                while(i < this.products[index].badges.length) {
+
+                    if(this.products[index].badges[i].type.includes("discount")) {
+                        let discount = this.products[index].badges[i].value;
+                        discount = Math.abs(parseInt(discount));
+                        let sale = (this.products[index].price - (discount / 100) * this.products[index].price).toFixed(2);
+                        this.priceOnSale.push(sale);
+                    } else {
+                        if (this.products[index].badges.length === 1) {
+                            this.priceOnSale.push(this.products[index].price);
+                        }
+                    }
+
+                    i++;
+
+                }
+                
+                return this.priceOnSale[index];
+
+
+            },
+
+            displayDiscount(index) {
+
+                let i = 0;
+                while(i < this.products[index].badges.length) {
+
+                    if(this.products[index].badges[i].type.includes("discount")) {
+                        this.discountArray.push(this.products[index].badges[i].value);
+                    } else {
+                        if (this.products[index].badges.length === 1) {
+                            this.discountArray.push(0);
+                        }
+                    }
+
+                    i++;
+
+                }
+                
+                return this.discountArray[index];
+
+            },
+
+            displayTag(index) {
+
+                let tagArray = [];
 
                 for(let i = 0; i < 6; i++) {
 
-                    let card = {
-                        image: "",
-                        discount: 0,
-                        isGreen: false,
-                        brandName: "",
-                        productName: "",
-                        price: 0,
-                        priceOnSale: 0,
-
-                    };
-                    card.image = this.image[i];
-                    card.discount = this.discount[i];
-                    card.isGreen = this.isGreen[i];
-                    card.brandName = this.brandName[i];
-                    card.productName = this.productName[i].toUpperCase();
-                    card.price = this.price[i];
-                    if(this.discount[i] > 0) {
-                        card.priceOnSale = (this.price[i] - ( (this.discount[i]) / 100) * this.price[i]).toFixed(2);
+                    if(this.products[i].badges[0].type.includes("tag")) {
+                        tagArray.push(this.products[i].badges[0].value)
                     } else {
-                        card.priceOnSale = this.price[i];
+                        tagArray.push('');
                     }
-                    cardsList.push(card);
 
-                };
+                    console.log(tagArray[index]);
 
-                return cardsList;
+                }
+
+                return tagArray[index];
 
             },
 
         }
+        
     }
 </script>
 
@@ -80,19 +109,19 @@
         <div class="row">
             <div 
                 class="col-4"
-                v-for="(card, index) in groupCard()"
+                v-for="(card, index) in products"
                 :key="index"
                 v-show="index >= 0 && index < 3"
             >
 
                 <Product
-                    :image="card.image"
-                    :discount="card.discount"
-                    :isGreen="card.isGreen"
-                    :brandName="card.brandName"
-                    :productName="card.productName"
+                    :image="`/img/${card.frontImage}`"
+                    :brandName="card.brand"
+                    :productName="card.name"
+                    :priceOnSale="calculateDiscount(index)"
                     :price="card.price"
-                    :priceOnSale="card.priceOnSale"
+                    :discount="displayDiscount(index)"
+                    :isGreen="displayTag(index)"
                 />
 
             </div>
@@ -100,19 +129,19 @@
         <div class="row mt-5">
             <div
                 class="col-4"
-                v-for="(card, index) in groupCard()"
+                v-for="(card, index) in products"
                 :key="index"
                 v-show="index >= 3 && index < 6"
             >
 
                 <Product
-                    :image="card.image"
-                    :discount="card.discount"
-                    :isGreen="card.isGreen"
-                    :brandName="card.brandName"
-                    :productName="card.productName"
+                    :image="`/img/${card.frontImage}`"
+                    :brandName="card.brand"
+                    :productName="card.name"
+                    :priceOnSale="calculateDiscount(index)"
                     :price="card.price"
-                    :priceOnSale="card.priceOnSale"
+                    :discount="displayDiscount(index)"
+                    :isGreen="displayTag(index)"
                 />
                 
             </div>
