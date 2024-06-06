@@ -13,7 +13,6 @@
                 products: products.products,
                 priceOnSale: [],
                 discountArray: [],
-                count: 0,
 
             };
 
@@ -106,12 +105,11 @@
 
     <div class="list container text-center px-0 my-5">
 
-        <div class="row">
+        <div class="row gy-5">
             <div 
                 class="col-4"
                 v-for="(card, index) in products"
                 :key="index"
-                v-show="index >= 0 && index < 3"
             >
 
                 <Product
@@ -124,26 +122,6 @@
                     :isGreen="displayTag(index)"
                 />
 
-            </div>
-        </div>
-        <div class="row mt-5">
-            <div
-                class="col-4"
-                v-for="(card, index) in products"
-                :key="index"
-                v-show="index >= 3 && index < 6"
-            >
-
-                <Product
-                    :image="`/img/${card.frontImage}`"
-                    :brandName="card.brand"
-                    :productName="card.name"
-                    :priceOnSale="calculateDiscount(index)"
-                    :price="card.price"
-                    :discount="displayDiscount(index)"
-                    :isGreen="displayTag(index)"
-                />
-                
             </div>
         </div>
 
